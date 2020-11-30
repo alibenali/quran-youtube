@@ -9,19 +9,16 @@ headers = {
 domain = 'nature'
 params = (
     ('query', domain),
-    ('per_page', '50'),
+    ('per_page', '100'),
     ('page', '1'),
     ('min_width', '1280'),
-    ('max_width', '1280'),
-    ('min_height', '720'),
-    ('max_height', '720'),
-    ('min_duration', '40'),
-
 )
 
 response = requests.get('https://api.pexels.com/videos/search', headers=headers, params=params)
 data = response.json()
 
 for video in data['videos']:
-    videoLink = video['video_files'][0]['link']
-    urllib.request.urlretrieve(videoLink, 'videos/'+str(domain)+'/'+str(randint(99999999,999999999999))+'.mp4') 
+    for videoFiles in video['video_files']:
+        if videoFiles['width'] == 1280 and videoFiles['height'] == 720:
+            videoLink = videoFiles['link']
+            urllib.request.urlretrieve(videoLink, 'videos/'+str(domain)+'/new'+str(randint(99999999,999999999999))+'.mp4') 
